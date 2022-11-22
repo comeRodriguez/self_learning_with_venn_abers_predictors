@@ -79,8 +79,8 @@ class CustomLogisticRegression():
             (Tuple[pd.DataFrame, float]): Predicted probabilities and loss value
         """
         train_response = pd.DataFrame(y_train.copy())
+        train_response.columns = ["interval"]
         if first_iteration:
-            train_response.columns = ["interval"]
             if informative:
                 hypotetic_label = y_train.apply(lambda x: 1 if x[1] >= 0.5 else 0)
 

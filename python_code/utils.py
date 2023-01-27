@@ -4,6 +4,12 @@
 from typing import List
 import pandas as pd
 from scipy.special import rel_entr
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+import torch
+from torch.autograd import Variable
 
 def get_right_probability_distribution(
     probability_interval: List[float],
@@ -64,3 +70,27 @@ def get_accuracy(y_true: pd.Series, y_pred: pd.Series) -> float:
         ]
     )/len(y_pred)
     return accuracy
+
+def plot_decision_boundary(dataset, labels, model, steps=1000, color_map='Paired'):
+    color_map = plt.get_cmap(color_map)
+    # Define region of interest by data limits
+    print()
+    xmin, xmax = dataset.to_numpy()[:, 0].min() - 1, dataset.to_numpy()[:, 0].max() + 1
+    ymin, ymax = dataset.to_numpy()[:, 1].min() - 1, dataset.to_numpy()[:, 1].max() + 1
+    steps = 1000
+    x_span = np.linspace(xmin, xmax, steps)
+    y_span = np.linspace(ymin, ymax, steps)
+    xx, yy = np.meshgrid(x_span, y_span)
+
+    # Make predictions across region of interest
+    model.eval()
+    labels_predicted = model(Variable(torch.from_numpy(np.c_[xx.ravel(), yy.ravel()]).float()))
+
+    # Plot decision boundary in region of interest
+    labels_predicted = [0 if value <= 0.5 else 1 for value in labels_predicted.detach().numpy()]
+    z = np.array(labels_predicted).reshape(xx.shape)
+    
+    fig, ax = plt.subplots(figsize=(20, 10))
+    ax.contourf(xx, yy, z, cmap=color_map, alpha=0.2)
+    
+    return fig, ax

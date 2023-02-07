@@ -1,7 +1,7 @@
 """This file contains usefull functions
 """
 
-from typing import List
+from typing import List, Tuple
 import pandas as pd
 from scipy.special import rel_entr
 import pandas as pd
@@ -10,6 +10,84 @@ import matplotlib.pyplot as plt
 
 import torch
 from torch.autograd import Variable
+
+
+class MyDataset(torch.utils.data.Dataset):
+    """Custom dataset for pytorch model
+    """
+    def __init__(self, x_train: pd.DataFrame, y_train: pd.Series, credal: bool=False):
+        """_summary_
+
+        Args:
+            x_train (pd.DataFrame): training features
+            y_train (pd.Series): training label
+            credal (bool, optional): if y_train is credal (i.e an interval)
+                or not. Defaults to False.
+        """
+        x=x_train.values
+        y=y_train.values
+        self.X_train=torch.tensor(x,dtype=torch.float32)
+        if not credal:
+            self.Y_train=y.astype("float32")
+        else:
+            self.Y_train=y
+    def __len__(self) -> int:
+        """Get length
+
+        Returns:
+            int: length of y_train
+        """
+        return len(self.Y_train)
+   
+    def __getitem__(self, idx: int) -> Tuple(torch.Tensor, torch.Tensor):
+        """Get item
+
+        Args:
+            idx (int): indice of batch
+
+        Returns:
+            batch of X_train and corresponding batch of Y_train
+        """
+        return self.X_train[idx], self.Y_train[idx]
+
+
+def KLD_loss_credal(y_true: torch.Tensor, y_pred: torch.Tensor) -> torch.Tensor:
+    """Compute the KLD Loss D_KL(y_true || y_pred) for binary classification
+    with credal sets as Y_train
+
+    Args:
+        y_true (torch.Tensor): Y_train in form of credal sets 
+        y_pred (torch.Tensor): probabilities output by a binary classifier
+
+    Returns:
+        torch.Tensor: KLD Loss (with requires_grad=True for gradient descent)
+    """    
+    y_true_inf = y_true[:, 0].reshape(-1, 1)
+    y_true_sup = y_true[:, 1].reshape(-1, 1)
+    used_probas = torch.zeros(y_true.shape[0], 1)
+    used_probas[y_pred <= y_true_inf] = y_true_inf[y_pred <= y_true_inf]
+    used_probas[y_pred >= y_true_sup] = y_true_sup[y_pred >= y_true_sup]
+    used_probas[(y_pred >= y_true_inf) & (y_pred <= y_true_sup)
+                ] = y_pred[(y_pred >= y_true_inf) & (y_pred <= y_true_sup)]
+    loss = torch.mean(used_probas* torch.log(used_probas/y_pred) + (1-used_probas)*torch.log((1-used_probas)/(1-y_pred)))
+    return loss
+
+
+def KLD_loss(y_true: torch.Tensor, y_pred: torch.Tensor) -> torch.Tensor:
+    """Compute the KLD Loss D_KL(y_true || y_pred) for binary classification
+    with soft labels as Y_train
+
+    Args:
+        y_true (torch.Tensor): Y_train in form of soft labels
+        y_pred (torch.Tensor): probabilities output by a binary classifier
+
+    Returns:
+        torch.Tensor: KLD Loss (with requires_grad=True for gradient descent)
+    """
+    loss = torch.mean(y_true* torch.log(y_true/y_pred) + (1-y_true)*torch.log((1-y_true)/(1-y_pred)))
+    return loss
+
+
 
 def get_right_probability_distribution(
     probability_interval: List[float],
@@ -94,3 +172,4 @@ def plot_decision_boundary(dataset, labels, model, steps=1000, color_map='Paired
     ax.contourf(xx, yy, z, cmap=color_map, alpha=0.2)
     
     return fig, ax
+

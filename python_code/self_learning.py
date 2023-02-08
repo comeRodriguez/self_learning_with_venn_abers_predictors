@@ -24,9 +24,9 @@ class SelfLearning():
     """
     def __init__(
         self,
-        known_x_train: np.ndarray,
-        known_y_train: np.ndarray,
-        unknown_x_train: np.ndarray,
+        known_x_train: pd.DataFrame,
+        known_y_train: pd.Series,
+        unknown_x_train: pd.DataFrame,
         model_convergence_epochs: int,
         model_learning_rate: float,
         n_input_unit: int,
@@ -37,9 +37,9 @@ class SelfLearning():
         """Initialisation of the class
 
         Args:
-            known_x_train (np.ndarray): Training features data for which the label y is known
-            known_y_train (np.ndarray): Associated label y with known_x_train
-            unknown_x_train (np.ndarray): Training features data for which the label y
+            known_x_train (pd.DataFrame): Training features data for which the label y is known
+            known_y_train (pd.Series): Associated label y with known_x_train
+            unknown_x_train (pd.DataFrame): Training features data for which the label y
                 is not known
             model_convergence_epochs (int): number of iterations for classifier convergence
             model_learning_rate (float): learning rate for model's gradient descent
@@ -73,8 +73,8 @@ class SelfLearning():
     
     def learning(
         self,
-        validation_x: np.ndarray,
-        validation_y: np.ndarray,
+        validation_x: pd.DataFrame,
+        validation_y: pd.Series,
         batch_adding: int=5,
         verbose: bool=False
     ):
@@ -83,8 +83,8 @@ class SelfLearning():
         set.
 
         Args:
-            validation_x (np.ndarray): Validation features
-            validation_y (np.ndarray): Validation labels
+            validation_x (pd.DataFrame): Validation features
+            validation_y (pd.Series): Validation labels
             batch_adding (int, optional): Number of instances to add at each iteration (add 
                 a batch of most probable instances being 1 and a batch of most probable instances
                 being 0). Defaults to 5.
@@ -165,9 +165,9 @@ class SelfLearningWithSoft():
     """
     def __init__(
         self,
-        known_x_train: np.ndarray,
-        known_y_train: np.ndarray,
-        unknown_x_train: np.ndarray,
+        known_x_train: pd.DataFrame,
+        known_y_train: pd.Series,
+        unknown_x_train: pd.DataFrame,
         model_convergence_epochs: int,
         model_learning_rate: float,
         n_input_unit: int,
@@ -178,9 +178,9 @@ class SelfLearningWithSoft():
         """Initialisation of the class
 
         Args:
-            known_x_train (np.ndarray): Training features data for which the label y is known
-            known_y_train (np.ndarray): Associated label y with known_x_train
-            unknown_x_train (np.ndarray): Training features data for which the label y
+            known_x_train (pd.DataFrame): Training features data for which the label y is known
+            known_y_train (pd.Series): Associated label y with known_x_train
+            unknown_x_train (pd.DataFrame): Training features data for which the label y
                 is not known
             model_convergence_epochs (int): number of iterations for classifier convergence
             model_learning_rate (float): learning rate for model's gradient descent
@@ -215,8 +215,8 @@ class SelfLearningWithSoft():
     
     def learning(
         self,
-        validation_x: np.ndarray,
-        validation_y: np.ndarray,
+        validation_x: pd.DataFrame,
+        validation_y: pd.Series,
         n_epochs: int=10,
         verbose: bool=False
     ):
@@ -225,8 +225,8 @@ class SelfLearningWithSoft():
         training set and train the classifier on it.
 
         Args:
-            validation_x (np.ndarray): Validation features
-            validation_y (np.ndarray): Validation labels
+            validation_x (pd.DataFrame): Validation features
+            validation_y (pd.Series): Validation labels
             n_epochs (int, optionnal): Number of learning iterations. Defaults to 10.
             verbose (bool, optional): True if you want to print informations during learning,
                 else False. Defaults to False
@@ -280,11 +280,11 @@ class SelfLearningUsingVennAbers():
     """
     def __init__(
         self,
-        known_x_train: np.ndarray,
-        known_y_train: np.ndarray,
-        unknown_x_train: np.ndarray,
-        calib_x_train: np.ndarray, 
-        calib_y_train: np.ndarray,
+        known_x_train: pd.DataFrame,
+        known_y_train: pd.Series,
+        unknown_x_train: pd.DataFrame,
+        calib_x_train: pd.DataFrame, 
+        calib_y_train: pd.Series,
         model_convergence_epochs: int,
         model_learning_rate: float,
         n_input_unit: int,
@@ -295,12 +295,12 @@ class SelfLearningUsingVennAbers():
         """Initialisation of the class
 
         Args:
-            known_x_train (np.ndarray): Training features data for which the label y is known
-            known_y_train (np.ndarray): Associated label y with known_x_train
-            unknown_x_train (np.ndarray): Training features data for which the label y
+            known_x_train (pd.DataFrame): Training features data for which the label y is known
+            known_y_train (pd.Series): Associated label y with known_x_train
+            unknown_x_train (pd.DataFrame): Training features data for which the label y
                 is not known
-            calib_x_train (np.ndarray): Calibration features used in the Venn Abers
-            calib_y_train (np.ndarray): Associated label y with calib_x_train
+            calib_x_train (pd.DataFrame): Calibration features used in the Venn Abers
+            calib_y_train (pd.Series): Associated label y with calib_x_train
             model_convergence_epochs (int): number of iterations for classifier convergence
             model_learning_rate (float): learning rate for model's gradient descent
             n_input_units (int): number of neurons for the model's input layer
@@ -336,8 +336,8 @@ class SelfLearningUsingVennAbers():
     
     def learning(
         self,
-        validation_x: np.ndarray,
-        validation_y: np.ndarray,
+        validation_x: pd.DataFrame,
+        validation_y: pd.Series,
         n_epochs: int=10,
         verbose: bool=False
     ):
@@ -347,8 +347,8 @@ class SelfLearningUsingVennAbers():
         train the classifier on it.
 
         Args:
-            validation_x (np.ndarray): Validation features
-            validation_y (np.ndarray): Validation labels
+            validation_x (pd.DataFrame): Validation features
+            validation_y (pd.Series): Validation labels
             n_epochs (int, optionnal): Number of learning iterations. Defaults to 10.
             verbose (bool, optional): True if you want to print informations during learning,
                 else False. Defaults to False

@@ -1,4 +1,8 @@
 """This file contains usefull functions
+
+Self Learning using Venn Abers predictors
+
+@Côme Rodriguez, @Vitor Bordini, @Sébastien Destercke and @Benjamin Quost
 """
 
 from typing import List, Tuple

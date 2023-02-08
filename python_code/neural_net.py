@@ -3,7 +3,7 @@ and soft labels, the other for hard and credal labels).
 
 Self Learning using Venn Abers predictors
 
-Côme Rodriguez, Vitor Bordini, Sébastien Destercke and Benjamin Quost
+@Côme Rodriguez, @Vitor Bordini, @Sébastien Destercke and @Benjamin Quost
 """
 
 from typing import Union

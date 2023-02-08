@@ -43,7 +43,7 @@ class MyDataset(torch.utils.data.Dataset):
         """
         return len(self.Y_train)
    
-    def __getitem__(self, idx: int) -> Tuple(torch.Tensor, torch.Tensor):
+    def __getitem__(self, idx: int) -> Tuple[torch.Tensor, torch.Tensor]:
         """Get item
 
         Args:

@@ -447,7 +447,9 @@ class SelfLearningUsingVennAbers():
 if __name__ == "__main__":
     """Example of how to use one of the 3 class above
     """
-    df = pd.read_csv("../data/SynthCross_n1000_p2.csv")
+    import os
+    print(os.getcwd())
+    df = pd.read_csv("data/SynthCross_n1000_p2.csv")
     df["z"] = df["z"].apply(lambda x: 1 if x=="A" else 0)
 
     X_train, X_test, Y_train, Y_test = train_test_split(df[["X1", "X2"]], df["z"], train_size=0.8)
@@ -464,6 +466,10 @@ if __name__ == "__main__":
         unknown_x_train=unknow_train[["X1", "X2"]],
         calib_x_train=X_calib[["X1", "X2"]],
         calib_y_train=Y_calib,
-        model_convergence_epochs=10
+        model_convergence_epochs=10,
+        model_learning_rate=0.2,
+        n_input_unit=2,
+        n_hidden_units=3,
+        verbose=True,
     )
-    test.learning(validation_x=X_test, validation_y=Y_test, n_epochs=10)
+    test.learning(validation_x=X_test, validation_y=Y_test, n_epochs=10, verbose=True)

@@ -255,7 +255,7 @@ class SelfLearningWithSoft():
                 self.known_y_train[self.length_known:] = self.unknown_x_train["y"]
             self.unknown_x_train = self.unknown_x_train.drop(["y"], axis=1)
             predictions = self.model.predict_probas(
-                validation_x
+                validation_x.to_numpy()
             ).reshape(-1).detach().numpy().round()
             self.accuracies.append(accuracy_score(validation_y, predictions))
             if verbose:
